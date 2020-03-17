@@ -3,11 +3,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   color: rgb(31, 0, 209);
   background-color: rgb(178, 204, 178);
-  height: 100vh;
 }
 
 header {
-  height: 10%;
+  height: 10vh;
   text-align: center;
 }
 
@@ -19,7 +18,7 @@ header {
 
 .container {
   display: flex;
-  height: 90%;
+  height: 80vh;
   width:100vw;
   justify-content: space-around;
   align-items: center;
