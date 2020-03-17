@@ -40,11 +40,12 @@
     </div>
       
     </div>
+    <audio id="cougher" src="audio/cough.mp3"></audio>
     
     
   </body>
   <script>
-    const timer = 0;
+    let timer = 0;
     async function getData() {
       const endpoint = 'https://thevirustracker.com/free-api?countryTotal='
       const country = 'NL'
@@ -70,5 +71,16 @@
     }
 
     getData();
+
+    const svgElements = document.querySelectorAll('svg')
+    svgElements.forEach(element => {
+      element.addEventListener('click', function() {
+        play()
+      })
+    });
+    function play() {
+        var audio = document.getElementById("cougher");
+        audio.play();
+      }
   </script>
 </html>
