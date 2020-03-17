@@ -72,3 +72,7 @@ select {
     transform: rotate(360deg);
   }
 }
+
+.one-more {
+  animation: rotate 2s ease;
+}

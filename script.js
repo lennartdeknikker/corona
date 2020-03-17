@@ -56,15 +56,24 @@ function setSoundIntervals(cases) {
 function playSickAtInterval(interval) {
   
   console.log('every ' + Math.round(interval/1000/60) + ' minutes someone gets sick')
+  
   sickIntervalInstance = setInterval(() => {
-  playSick();
+    document.getElementById('sick-icon').classList.remove('one-more')
+    setTimeout(() => {
+      document.getElementById('sick-icon').classList.add('one-more')
+    playSick();
+    }, 1000);
 }, interval);
 }
 
 function playDeathAtInterval(interval) {
   console.log('every ' + Math.round(interval/1000/60) + ' minutes someone dies')
   deathIntervalInstance = setInterval(() => {
-  playDeath();
+    document.getElementById('death-icon').classList.remove('one-more')
+    setTimeout(() => {
+      document.getElementById('death-icon').classList.add('one-more')
+    playDeath();
+    }, 1000);
 }, interval);
 }
 
