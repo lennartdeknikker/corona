@@ -17,6 +17,7 @@ function updateData(cases) {
 
 async function startUpdateInterval(interval) {
   const cases = await apiCall()
+  console.log(cases);
   updateData(cases);
   setTimeout(function() {
     startUpdateInterval(interval)
@@ -39,15 +40,14 @@ async function apiCall() {
   return cases; 
 }
 
-async function setSoundIntervals() {
-  const cases = await apiCall()
+function setSoundIntervals(cases) {
   const sickInterval = (24*60*60*1000)/(cases.countrydata[0].total_new_cases_today)
   const deathInterval = (24*60*60*1000)/(cases.countrydata[0].total_new_deaths_today)
   
   if (cases.countrydata[0].total_new_cases_today > 1) {
     playSickAtInterval(sickInterval);    
   }
-  
+
   if (cases.countrydata[0].total_new_deaths_today > 1) {
     playDeathAtInterval(deathInterval);    
   }
@@ -78,9 +78,6 @@ function removeOldData() {
 }
 
 function createLoader() {
-  const loader = document.createElement('img');
-  loader.src='/images/loader.png'
-  loader.classList.add('loader');
   
   const deathsTextElement = document.getElementById('deaths');
   const sickTextElement = document.getElementById('sick');
@@ -116,11 +113,16 @@ function createDropdown() {
   }
 }
 
+
 const dropdown = document.querySelector('select');
-dropdown.addEventListener('change', function() {
+dropdown.addEventListener('change', async function() {
   removeOldData();
   createLoader();
-  setSoundIntervals();
+  
+  const cases = await apiCall()
+  console.log(cases);
+  updateData(cases);
+  setSoundIntervals(cases);
 })
 
 
@@ -152,6 +154,11 @@ function playYay() {
   }
 
 
-  createDropdown();
-  setSoundIntervals();
-  startUpdateInterval(60000 * 10);
+  async function startUp() {
+    createDropdown();
+    const cases = await apiCall()
+    setSoundIntervals(cases);
+    startUpdateInterval(60000 * 10);
+  }
+
+  startUp();
