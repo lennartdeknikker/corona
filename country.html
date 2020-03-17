@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>corona counter</title>
+  </head>
+  <body>
+    <input type="text" id="country">
+    <button id="search">get data</button>
+    <div id="listview">
+
+    </div>
+  </body>
+  <script>
+    
+    const searchField = document.getElementById('country');
+
+    document.getElementById('search').addEventListener('click', function() {
+      getData();
+    } )
+
+    searchField.addEventListener('keyup', function(event) {
+      if (event.keyCode === 13) {
+    event.preventDefault();
+    document.getElementById("search").click();
+  }
+    })
+
+    async function getData() {
+      const endpoint = 'https://thevirustracker.com/free-api?countryTotal='
+      const country = searchField.value;
+      console.log(`getting data for ${country}`);
+      const cases = await fetch(endpoint+country)
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          return data
+        });
+        const listview = document.getElementById('listview')
+        const title = document.createElement('h2');
+        title.innerText = cases.countrydata[0].info.title
+        listview.appendChild(title);
+        const listing = document.createElement('ul');
+
+        for (const item in cases.countrydata[0]) {
+          if (item !== 'info') {
+          const header = document.createElement('span')
+          header.innerText = item.replace(/_/g, ' ') + ': '
+          const content = document.createTextNode(cases.countrydata[0][item])
+          const newLi = document.createElement('li');
+          newLi.appendChild(header);
+          newLi.appendChild(content);
+          listing.appendChild(newLi);
+          }
+        }
+        listview.appendChild(listing);
+    }
+  </script>
+</html>
