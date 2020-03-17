@@ -163,6 +163,7 @@ function playYay() {
 
 
   async function startUp() {
+    createLoader();
     createDropdown();
     const cases = await apiCall()
     setSoundIntervals(cases);
