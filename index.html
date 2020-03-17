@@ -63,8 +63,8 @@
       deathsTextElement.innerText = cases.countrydata[0].total_deaths;
       sickTextElement.innerText = cases.countrydata[0].total_active_cases;
       recoveriesTextElement.innerText = cases.countrydata[0].total_recovered;
-      timer = setInterval(() => {
       clearInterval(timer);
+      timer = setInterval(() => {
       getData();
     }, 10000);
     }
