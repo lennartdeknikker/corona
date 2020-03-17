@@ -1,6 +1,7 @@
 import countries from './countries.js';
 
-let timer = 0;
+let sickIntervalInstance;
+let deathIntervalInstance;
 
 function updateData(cases) {
   const titleElement = document.getElementById('header');
@@ -8,8 +9,7 @@ function updateData(cases) {
   const sickTextElement = document.getElementById('sick');
   const recoveriesTextElement = document.getElementById('recovered');
 
-  titleElement.innerText = `Corona in ${cases.countrydata[0].info.title} (${cases.countrydata[0].info.code})`;
-  console.log(cases.countrydata[0])
+  titleElement.innerText = `Corona in ${cases.countrydata[0].info.title}`;
   deathsTextElement.innerText = cases.countrydata[0].total_deaths;
   sickTextElement.innerText = cases.countrydata[0].total_active_cases;
   recoveriesTextElement.innerText = cases.countrydata[0].total_recovered;
@@ -17,7 +17,6 @@ function updateData(cases) {
 
 async function startUpdateInterval(interval) {
   const cases = await apiCall()
-  console.log(cases);
   updateData(cases);
   setTimeout(function() {
     startUpdateInterval(interval)
@@ -28,7 +27,6 @@ async function apiCall() {
   const endpoint = 'https://thevirustracker.com/free-api?countryTotal='
   const dropdown = document.querySelector('select');
   const country = String(dropdown.value).slice(-2)
-  console.log(country)
   console.log(`getting data for ${country}`);
   const cases = await fetch(endpoint+country)
     .then((response) => {
@@ -41,28 +39,31 @@ async function apiCall() {
 }
 
 function setSoundIntervals(cases) {
+  clearInterval(sickIntervalInstance);
+  clearInterval(deathIntervalInstance);
   const sickInterval = (24*60*60*1000)/(cases.countrydata[0].total_new_cases_today)
   const deathInterval = (24*60*60*1000)/(cases.countrydata[0].total_new_deaths_today)
   
+  if (cases.countrydata[0].total_new_deaths_today > 1) {
+    
+    playDeathAtInterval(deathInterval);    
+  }
   if (cases.countrydata[0].total_new_cases_today > 1) {
     playSickAtInterval(sickInterval);    
-  }
-
-  if (cases.countrydata[0].total_new_deaths_today > 1) {
-    playDeathAtInterval(deathInterval);    
   }
 }
 
 function playSickAtInterval(interval) {
+  
   console.log('every ' + Math.round(interval/1000/60) + ' minutes someone gets sick')
-  setInterval(() => {
+  sickIntervalInstance = setInterval(() => {
   playSick();
 }, interval);
 }
 
 function playDeathAtInterval(interval) {
   console.log('every ' + Math.round(interval/1000/60) + ' minutes someone dies')
-  setInterval(() => {
+  deathIntervalInstance = setInterval(() => {
   playDeath();
 }, interval);
 }
@@ -97,7 +98,6 @@ function createLoader() {
 
 function createDropdown() {
   const dropdown = document.querySelector('select');
-  console.log(dropdown);
   for (const country in countries) {
 
     const countryTitle = countries[country].countryTitle;
@@ -120,7 +120,6 @@ dropdown.addEventListener('change', async function() {
   createLoader();
   
   const cases = await apiCall()
-  console.log(cases);
   updateData(cases);
   setSoundIntervals(cases);
 })
