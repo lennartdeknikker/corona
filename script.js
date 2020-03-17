@@ -2,7 +2,28 @@ import countries from './countries.js';
 
 let timer = 0;
 
-async function getData() {
+function updateData(cases) {
+  const titleElement = document.getElementById('header');
+  const deathsTextElement = document.getElementById('deaths');
+  const sickTextElement = document.getElementById('sick');
+  const recoveriesTextElement = document.getElementById('recovered');
+
+  titleElement.innerText = `Corona in ${cases.countrydata[0].info.title} (${cases.countrydata[0].info.code})`;
+  console.log(cases.countrydata[0])
+  deathsTextElement.innerText = cases.countrydata[0].total_deaths;
+  sickTextElement.innerText = cases.countrydata[0].total_active_cases;
+  recoveriesTextElement.innerText = cases.countrydata[0].total_recovered;
+}
+
+async function startUpdateInterval(interval) {
+  const cases = await apiCall()
+  updateData(cases);
+  setTimeout(function() {
+    startUpdateInterval(interval)
+  }, interval)
+}
+
+async function apiCall() {
   const endpoint = 'https://thevirustracker.com/free-api?countryTotal='
   const dropdown = document.querySelector('select');
   const country = String(dropdown.value).slice(-2)
@@ -15,24 +36,31 @@ async function getData() {
     .then((data) => {
       return data
     });
-  const titleElement = document.getElementById('header');
-  const deathsTextElement = document.getElementById('deaths');
-  const sickTextElement = document.getElementById('sick');
-  const recoveriesTextElement = document.getElementById('recovered');
+  return cases; 
+}
 
-  titleElement.innerText = `Corona in ${cases.countrydata[0].info.title} (${cases.countrydata[0].info.code})`;
-  console.log(cases.countrydata[0])
-  deathsTextElement.innerText = cases.countrydata[0].total_deaths;
-  sickTextElement.innerText = cases.countrydata[0].total_active_cases;
-  recoveriesTextElement.innerText = cases.countrydata[0].total_recovered;
-  const interval = (24*60*60*1000)/(cases.countrydata[0].total_new_cases_today)
-  console.log(Math.round(interval/1000/60) + ' minuten')
-  clearInterval(timer);
-  timer = setInterval(() => {
+async function setSoundIntervals() {
+  const cases = await apiCall()
+  const sickInterval = (24*60*60*1000)/(cases.countrydata[0].total_new_cases_today)
+  const deathInterval = (24*60*60*1000)/(cases.countrydata[0].total_new_deaths_today)
+  playSickAtInterval(sickInterval);
+  playDeathAtInterval(deathInterval);
+}
+
+function playSickAtInterval(interval) {
+  console.log('every ' + Math.round(interval/1000/60) + ' minutes someone gets sick')
+  setInterval(() => {
   playSick();
-  getData();
 }, interval);
 }
+
+function playDeathAtInterval(interval) {
+  console.log('every ' + Math.round(interval/1000/60) + ' minutes someone dies')
+  setInterval(() => {
+  playDeath();
+}, interval);
+}
+
 
 function removeOldData() {
   const deathsTextElement = document.getElementById('deaths');
@@ -81,14 +109,12 @@ function createDropdown() {
     dropdown.appendChild(optionElement);
   }
 }
-createDropdown();
-getData();
 
 const dropdown = document.querySelector('select');
 dropdown.addEventListener('change', function() {
   removeOldData();
   createLoader();
-  getData();
+  setSoundIntervals();
 })
 
 
@@ -118,3 +144,8 @@ function playYay() {
     var audio = document.getElementById("yay");
     audio.play();
   }
+
+
+  createDropdown();
+  setSoundIntervals();
+  startUpdateInterval(60000 * 10);
