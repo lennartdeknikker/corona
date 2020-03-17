@@ -43,8 +43,14 @@ async function setSoundIntervals() {
   const cases = await apiCall()
   const sickInterval = (24*60*60*1000)/(cases.countrydata[0].total_new_cases_today)
   const deathInterval = (24*60*60*1000)/(cases.countrydata[0].total_new_deaths_today)
-  playSickAtInterval(sickInterval);
-  playDeathAtInterval(deathInterval);
+  
+  if (cases.countrydata[0].total_new_cases_today > 1) {
+    playSickAtInterval(sickInterval);    
+  }
+  
+  if (cases.countrydata[0].total_new_deaths_today > 1) {
+    playDeathAtInterval(deathInterval);    
+  }
 }
 
 function playSickAtInterval(interval) {
