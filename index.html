@@ -11,9 +11,23 @@
     </div>
   </body>
   <script>
-    document.getElementById('search').addEventListener('click', async function() {
+    
+    const searchField = document.getElementById('country');
+
+    document.getElementById('search').addEventListener('click', function() {
+      getData();
+    } )
+
+    searchField.addEventListener('keyup', function(event) {
+      if (event.keyCode === 13) {
+    event.preventDefault();
+    document.getElementById("search").click();
+  }
+    })
+
+    async function getData() {
       const endpoint = 'https://thevirustracker.com/free-api?countryTotal='
-      const country = document.getElementById('country').value;
+      const country = searchField.value;
       console.log(`getting data for ${country}`);
       const cases = await fetch(endpoint+country)
         .then((response) => {
@@ -40,6 +54,6 @@
           }
         }
         listview.appendChild(listing);
-    })
+    }
   </script>
 </html>
