@@ -1,17 +1,29 @@
 body {
   margin: 0;
-  overflow: hidden;
   font-family: Arial, Helvetica, sans-serif;
   color: rgb(31, 0, 209);
+  background-color: rgb(178, 204, 178);
+  height: 100vh;
+  overflow: hidden;
+}
+
+header {
+  height: 10%;
+  text-align: center;
+}
+
+.selector-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .container {
   display: flex;
-  height: 100vh;
+  height: 90%;
   width:100vw;
   justify-content: space-around;
   align-items: center;
-  background-color: rgb(178, 204, 178);
 }
 
 .item {
@@ -41,4 +53,22 @@ svg {
 svg:hover {
   /* transform: rotate(360deg); */
   transform: translateY(10px)
+}
+
+select {
+  width: 20em;
+}
+
+.loader {
+  width: 1em;
+  animation: rotate 2s infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
