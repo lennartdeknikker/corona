@@ -8,8 +8,9 @@ function updateData(cases) {
   const deathsTextElement = document.getElementById('deaths');
   const sickTextElement = document.getElementById('sick');
   const recoveriesTextElement = document.getElementById('recovered');
+  console.log(cases.countrydata[0]);
 
-  titleElement.innerText = `Corona in ${cases.countrydata[0].info.title}`;
+  titleElement.innerText = `${cases.countrydata[0].total_cases} cases of corona in ${cases.countrydata[0].info.title}`;
   deathsTextElement.innerText = cases.countrydata[0].total_deaths;
   sickTextElement.innerText = cases.countrydata[0].total_active_cases;
   recoveriesTextElement.innerText = cases.countrydata[0].total_recovered;
