@@ -32,6 +32,8 @@ header {
 
 h1 {
   padding: 0 1em;
+  font-size: 3em;
+  min-height: 3em;
 }
 
 h2 {
