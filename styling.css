@@ -134,7 +134,7 @@ select::-ms-expand {
 select {
   flex: 1;
   padding: 0 .5em;
-  color: blue;
+  color: rgb(31, 0, 209);
   font-weight: bold;
   cursor: pointer;
 }
