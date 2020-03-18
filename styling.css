@@ -55,6 +55,7 @@ svg:hover {
 select {
   width: 20rem;
   font-size: 1.5em;
+  margin: 1em;
 }
 
 .loader {
@@ -73,4 +74,10 @@ select {
 
 .one-more {
   animation: rotate 2s ease;
+}
+
+@media (max-width: 360px) {
+  select {
+    width: 100%;
+  }
 }
