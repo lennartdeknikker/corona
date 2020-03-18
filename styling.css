@@ -6,13 +6,16 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   height: 100vh;
+  overflow: hidden;
 }
 
 header {
   text-align: center;
   height: 10%;
   min-height: 3em;
+  width: 100%;
 }
 
 .selector-container {
@@ -27,6 +30,7 @@ header {
   justify-content: space-around;
   align-items: center;
   height: 45%;
+  max-width: 80%;
 }
 
 .item {
