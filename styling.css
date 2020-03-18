@@ -11,6 +11,8 @@ body {
 
 header {
   text-align: center;
+  height: 10%;
+  min-height: 3em;
 }
 
 .selector-container {
@@ -24,6 +26,7 @@ header {
   width:100vw;
   justify-content: space-around;
   align-items: center;
+  height: 45%;
 }
 
 .item {
@@ -32,14 +35,21 @@ header {
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 1em;
+  min-height: 10em;
 }
 
 h1 {
-  padding: 0 1em;
+  padding: 0 0.2em;
   font-size: 6em;
-  min-height: 3rem;
-  margin: 1em 0;
+  height: 45%;
+  box-sizing: border-box;
+  margin: 0;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1em;
 }
 
 h2 {
@@ -49,6 +59,7 @@ h2 {
 
 h3 {
   font-size: 2em;
+  margin: .5em 0 0;
 }
 
 svg {
