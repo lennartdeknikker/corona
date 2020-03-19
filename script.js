@@ -14,7 +14,7 @@ function updateData(cases) {
   // deathsTextElement.innerText = cases.countrydata[0].total_deaths;
   // sickTextElement.innerText = cases.countrydata[0].total_active_cases;
   // recoveriesTextElement.innerText = cases.countrydata[0].total_recovered;
-  // titleElement.innerText = `${cases.latest_stat_by_country[0].total_cases}`;
+  titleElement.innerText = `${cases.latest_stat_by_country[0].total_cases}`;
   deathsTextElement.innerText = cases.latest_stat_by_country[0].total_deaths;
   sickTextElement.innerText = cases.latest_stat_by_country[0].active_cases;
   recoveriesTextElement.innerText = cases.latest_stat_by_country[0].total_recovered;
