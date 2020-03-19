@@ -40,6 +40,13 @@ async function startUpdateInterval(interval) {
   }, interval)
 }
 
+async function ApiTest() {
+  const testResult = await fetch('/.netlify/functions/api?country=Netherlands')
+  console.log(testResult);
+}
+
+ApiTest()
+
 async function apiCall() {
 
   const dropdown = document.querySelector('select');
