@@ -9,13 +9,12 @@ const Settings = {
 }
 
 exports.handler = async (event, context) => {
-  const country = event.queryStringParameters.country
-  return country
-  // return fetch(Settings.endpoint+country, { headers: Settings.headers })
-  //   .then(response => response.json())
-  //   .then(data => ({
-  //     statusCode: 200,
-  //     body: data
-  //   }))
-  //   .catch(error => ({ statusCode: 422, body: String(error) }));
+  // const country = event.queryStringParameters.country
+  return fetch(Settings.endpoint+'Netherlands', { headers: Settings.headers })
+    .then(response => response.json())
+    .then(data => ({
+      statusCode: 200,
+      body: data
+    }))
+    .catch(error => ({ statusCode: 422, body: String(error) }));
 };
