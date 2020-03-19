@@ -41,7 +41,7 @@ async function startUpdateInterval(interval) {
 }
 
 async function ApiTest() {
-  const testResult = await fetch('/.netlify/functions/api?country=Netherlands')
+  const testResult = await fetch('/.netlify/functions/api?name=lennart')
   console.log(testResult);
 }
 
