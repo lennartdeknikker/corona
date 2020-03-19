@@ -50,8 +50,6 @@ async function ApiTest() {
       console.log(data);
     }
   )
-
-  console.log(testResult);  
 }
 
 ApiTest()
