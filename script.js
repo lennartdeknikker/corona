@@ -1,23 +1,34 @@
 import countries from './countries.js';
 
+const Settings = {
+  endpoint: 'https://coronavirus-monitor.p.rapidapi.com/coronavirus/latest_stat_by_country.php?country=',
+  headers: {
+    "x-rapidapi-host": "coronavirus-monitor.p.rapidapi.com",
+    "x-rapidapi-key": "1c2f9445f2msh7d0813c62a2f058p18c647jsn65331c70d7ad"
+  },
+  variables: {
+    prefix: 'latest_stat_by_country',
+    totalCases: 'total_cases',
+    totalDeaths: 'total_deaths',
+    activeCases: 'active_cases',
+    totalRecovered: 'total_recovered',
+    newCases: 'new_cases',
+    newDeaths: 'new_deaths'
+  }
+}
+
 let sickIntervalInstance;
 let deathIntervalInstance;
 
 function updateData(cases) {
-  console.log(cases);
   const titleElement = document.getElementById('header');
   const deathsTextElement = document.getElementById('deaths');
   const sickTextElement = document.getElementById('sick');
   const recoveriesTextElement = document.getElementById('recovered');
-
-  // titleElement.innerText = `${cases.countrydata[0].total_cases}`;
-  // deathsTextElement.innerText = cases.countrydata[0].total_deaths;
-  // sickTextElement.innerText = cases.countrydata[0].total_active_cases;
-  // recoveriesTextElement.innerText = cases.countrydata[0].total_recovered;
-  titleElement.innerText = `${cases.latest_stat_by_country[0].total_cases}`;
-  deathsTextElement.innerText = cases.latest_stat_by_country[0].total_deaths;
-  sickTextElement.innerText = cases.latest_stat_by_country[0].active_cases;
-  recoveriesTextElement.innerText = cases.latest_stat_by_country[0].total_recovered;
+  titleElement.innerText = `${cases[Settings.variables.prefix][0][Settings.variables.totalCases]}`;
+  deathsTextElement.innerText = cases[Settings.variables.prefix][0].total_deaths || 0;
+  sickTextElement.innerText = cases[Settings.variables.prefix][0].active_cases || 0;
+  recoveriesTextElement.innerText = cases[Settings.variables.prefix][0].total_recovered || 0;
 }
 
 async function startUpdateInterval(interval) {
@@ -28,33 +39,14 @@ async function startUpdateInterval(interval) {
   }, interval)
 }
 
-// async function apiCall() {
-//   const endpoint = 'https://thevirustracker.com/free-api?countryTotal='
-//   const dropdown = document.querySelector('select');
-//   const country = String(dropdown.value).slice(-2)
-//   console.log(`getting data for ${country}`);
-//   const cases = await fetch(endpoint+country)
-//     .then((response) => {
-//       return response.json();
-//     })
-//     .then((data) => {
-//       return data
-//     });
-//   return cases; 
-// }
-
 async function apiCall() {
 
-  const endpoint = 'https://thevirustracker.com/free-api?countryTotal='
   const dropdown = document.querySelector('select');
   const country = String(dropdown.value)
   console.log(`getting data for ${country}`);
-  const cases = await fetch(`https://coronavirus-monitor.p.rapidapi.com/coronavirus/latest_stat_by_country.php?country=${country}`, {
+  const cases = await fetch(`${Settings.endpoint}${country}`, {
     "method": "GET",
-    "headers": {
-      "x-rapidapi-host": "coronavirus-monitor.p.rapidapi.com",
-      "x-rapidapi-key": "1c2f9445f2msh7d0813c62a2f058p18c647jsn65331c70d7ad"
-    }
+    "headers": Settings.headers
   })
   .then(response => {
     return response.json()
@@ -62,22 +54,20 @@ async function apiCall() {
   .catch(err => {
     console.log(err);
   });
-  console.log(cases);
   return cases; 
 }
 
 function setSoundIntervals(cases) {
   clearInterval(sickIntervalInstance);
   clearInterval(deathIntervalInstance);
-  // const sickInterval = (24*60*60*1000)/(cases.countrydata[0].total_new_cases_today)
-  const sickInterval = (24*60*60*1000)/(cases.latest_stat_by_country[0].new_cases || 2)
-  const deathInterval = (24*60*60*1000)/(cases.countrydata[0].total_new_deaths_today || 2)
+  const sickInterval = (24*60*60*1000)/(cases[Settings.variables.prefix][0].new_cases || 2)
+  const deathInterval = (24*60*60*1000)/(cases[Settings.variables.prefix][0].new_deaths || 2)
   
-  if (cases.countrydata[0].total_new_deaths_today > 1) {
+  if (cases[Settings.variables.prefix][0].new_deaths > 1) {
     
     playDeathAtInterval(deathInterval);    
   }
-  if (cases.countrydata[0].total_new_cases_today > 1) {
+  if (cases[Settings.variables.prefix][0].new_cases > 1) {
     playSickAtInterval(sickInterval);    
   }
 }
@@ -134,19 +124,37 @@ function createLoader() {
   addLoader(recoveriesTextElement);
 }
 
+async function getCountriesFromApi() {
+  const countries = await fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/affected.php", {
+	"method": "GET",
+	"headers": {
+		"x-rapidapi-host": "coronavirus-monitor.p.rapidapi.com",
+		"x-rapidapi-key": "1c2f9445f2msh7d0813c62a2f058p18c647jsn65331c70d7ad"
+	}
+})
+.then(response => {
+	console.log(response.body.getReader());
+})
+.catch(err => {
+	console.log(err);
+});
+console.log(countries)
+}
+
+
+getCountriesFromApi();
+
 function createDropdown() {
   const dropdown = document.querySelector('select');
-  for (const country in countries) {
+  for (const country of countries) {
 
-    const countryTitle = countries[country].countryTitle;
-    const countryCode = countries[country].countryTitle;
     const optionElement = document.createElement('option');
 
-    optionElement.innerText = countryTitle;
-    if (countries[country].statisticsCode == 'NL') {
+    optionElement.innerText = country;
+    if (country === 'Netherlands') {
       optionElement.selected="selected"
     }
-    optionElement.value = countryCode;
+    optionElement.value = country;
     dropdown.appendChild(optionElement);
   }
 }
@@ -159,7 +167,7 @@ dropdown.addEventListener('change', async function() {
   
   const cases = await apiCall()
   updateData(cases);
-  // setSoundIntervals(cases);
+  setSoundIntervals(cases);
 })
 
 
@@ -195,7 +203,7 @@ function playYay() {
     createLoader();
     createDropdown();
     const cases = await apiCall()
-    // setSoundIntervals(cases);
+    setSoundIntervals(cases);
     startUpdateInterval(60000 * 10);
   }
 
