@@ -43,12 +43,13 @@ async function startUpdateInterval(interval) {
 async function ApiTest() {
   const testResult = await fetch('/.netlify/functions/api?name=lennart').then(
     response => {
-      return response;
+      return response.json();
+    }
+  ).then(
+    data => {
+      console.log(data);
     }
   )
-  .catch(err => {
-    console.log(err);
-  });
 
   console.log(testResult);  
 }
