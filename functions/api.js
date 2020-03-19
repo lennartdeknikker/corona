@@ -9,7 +9,7 @@ const Settings = {
 }
 
 exports.handler = async (event, context) => {
-  const country = event.body.country
+  const country = event.queryStringParameters.country
   return fetch(Settings.endpoint+country, { headers: Settings.headers })
     .then(response => response.json())
     .then(data => ({
