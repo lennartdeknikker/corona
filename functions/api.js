@@ -10,7 +10,7 @@ exports.handler = async (event, context) => {
     });
     res.on("end", () => {
       body = JSON.parse(body);
-      console.log(body);
+      return body;
     });
   });
 };
