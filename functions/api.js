@@ -9,8 +9,7 @@ exports.handler = async (event, context) => {
       body += data;
     });
     res.on("end", () => {
-      body = JSON.parse(body);
-      return body;
+      return body
     });
   });
 };
