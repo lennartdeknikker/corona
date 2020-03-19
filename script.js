@@ -40,20 +40,6 @@ async function startUpdateInterval(interval) {
   }, interval)
 }
 
-async function ApiTest() {
-  await fetch('/.netlify/functions/api?name=lennart').then(
-    response => {
-      return response.json();
-    }
-  ).then(
-    data => {
-      console.log(data);
-    }
-  )
-}
-
-ApiTest()
-
 async function apiCall() {
 
   const dropdown = document.querySelector('select');
