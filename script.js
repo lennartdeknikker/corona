@@ -185,7 +185,9 @@ function playYay() {
     createDropdown();
     const cases = await apiCall()
     setSoundIntervals(cases);
-    startUpdateInterval(60000 * 10);
+    
+    updateData(cases);
+    // startUpdateInterval(60000 * 10);
   }
 
   startUp();
